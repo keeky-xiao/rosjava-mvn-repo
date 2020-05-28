@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# This regenerates the index for this maven repo.
+
+java -jar nexus-indexer-3.0.4-cli.jar -r . -i ./.index -d ./.index -n "rosjava_mvn_repo"
+
+for f in `git ls-files -o`
+do
+  git add ${f}
+done
+
+echo
+echo -en "${yellow}Do you want to commit the new index [y/N]${reset}?"
+read commit
+case $commit in
+    [Yy]* ) git commit -a -m "updated index.";;
+    * ) exit 0;;
+esac
+
+echo
+echo -en "${yellow}Push to the github repository?[y/N]${reset}?"
+read push
+case $push in
+    [Yy]* ) git push;;
+    * ) exit 0;;
+esac
+
+
